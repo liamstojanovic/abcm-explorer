@@ -9,7 +9,10 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 #Check for version of ubuntu
-if [[ $(lsb_release -rs) == "18.04" ]]; then 
+if [[ $(lsb_release -rs) == "20.04" ]]; then 
+       echo "Compatible version. Proceeding."
+       ubuntu_version=$(lsb_release -rs)
+elif [[ $(lsb_release -rs) == "18.04" ]]; then 
        echo "Compatible version. Proceeding."
        ubuntu_version=$(lsb_release -rs)
 elif [[ $(lsb_release -rs) == "16.04" ]]; then
