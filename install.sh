@@ -27,8 +27,8 @@ if [ $retVal -ne 0 ]; then
     exit 1
 fi
 
-read -p "Two directories will be generated in the home (~/) directory: ~/abcmint, and ~/explorer. Press enter to continue..."
-cd ~/
+read -p "Two directories will be generated in the abc-explorer (~/) directory: ~/abcmint, and ~/explorer. Press enter to continue..."
+cd $current_dir
 
 #Clone repositories
 git clone https://github.com/abcmint/abcmint.git
@@ -37,17 +37,17 @@ git clone https://github.com/iquidus/explorer.git
 #Build ABCmint
 printf "\n\nBuilding ABCMint... This may take a while."
 sleep 5
-cd abcmint/src
+cd $current_dir/abcmint/src
 make -f makefile.unix
 
 # cp the config file (abcmint.conf) to the .abc directory
-cd $current_dir
 mkdir ~/.abc
+cd $current_dir
 cp config/abcmint.conf ~/.abc/abcmint.conf
 
 #Run ABCMint
 printf "\nStarting ABCMint, waiting for blockchain to be read..."
-cd ~/abcmint/src
+cd $current_dir/abcmint/src
 abcm_dir = $PWD
 ./abcmint -txindex=1 -server -daemon
 sleep 360
@@ -64,7 +64,7 @@ npm install --production
 
 # cp the settings.json file into the explorer directory.
 cd $current_dir
-cp config/settings.json ~/explorer/settings.json
+cp config/settings.json $explorer_dir/settings.json
 
 # Create a systemctl entry for Iquidus
 cp config/systemd.service config/systemd.service.copy
