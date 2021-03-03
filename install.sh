@@ -24,6 +24,7 @@ wait $dependencies_pid
 retVal=$?
 if [ $retVal -ne 0 ]; then
     echo "Installing dependencies failed. Check the dependencies.log file for more information."
+    exit 1
 fi
 
 read -p "Two directories will be generated in the home (~/) directory: ~/abcmint, and ~/explorer. Press enter to continue..."
