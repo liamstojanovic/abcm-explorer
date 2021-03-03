@@ -1,0 +1,20 @@
+[Unit]
+Description=ABCMint coin client
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+ExecStart=./abcmint -txindex=1 -server -daemon
+# Required on some systems
+WorkingDirectory=WORKINGDIRECTORYVAR
+Restart=always
+# Restart service after 10 seconds if node service crashes
+RestartSec=10
+# Output to syslog
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=abcexplorer
+User=USERVAR
+
+[Install]
+WantedBy=multi-user.target

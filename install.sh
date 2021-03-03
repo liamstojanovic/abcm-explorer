@@ -14,7 +14,7 @@ printf "This script has been tested for Ubuntu 18.04 server.\n"
 printf "To ensure there are no package conflicts, it is recommended to run this script on a fresh install.\n"
 printf "First we will check that our prerequisite packages are installed.\n"
 read -p "Press enter to continue..."
-###### NOTE: Need to figure out how to spawn child process without it killing parent, or figure out how to return an exit status of 0 without having bash complain.
+
 sudo nohup bash dependencies.sh > dependencies.log &
 dependencies_pid=$!
 printf "\nThe installer is running, with a PID of ${dependencies_pid}."
@@ -48,6 +48,7 @@ cp config/abcmint.conf ~/.abc/abcmint.conf
 #Run ABCMint
 printf "\nStarting ABCMint, waiting for blockchain to be read..."
 cd ~/abcmint/src
+abcm_dir = $PWD
 ./abcmint -txindex=1 -server -daemon
 sleep 360
 
@@ -71,8 +72,17 @@ sed -i -e "s|WORKINGDIRECTORYVAR|$explorer_dir|g" config/systemd.service.copy
 sed -i -e "s|USERVAR|$USER|g" config/systemd.service.copy
 sudo cp config/systemd.service.copy /etc/systemd/system/iquidus.service
 
-# Enable the Iquidus service at Startup
+# Create a systemctl entry for ABCmint
+cp config/abcm.service config/abcm.service.copy
+sed -i -e "s|WORKINGDIRECTORYVAR|$abcm_dir|g"  config/abcm.service.copy
+sed -i -e "s|USERVAR|$USER|g" config/abcm.service.copy
+sudo cp config/abcm.service.copy /etc/systemd/system/abcm.service
+
+
+# Enable the ABCM and Iquidus service at Startup
 sudo systemctl enable iquidus
+sudo systemctl enable abcm
+
 
 # Create crontab entries for Iquidus explorer node scripts
 (crontab -l 2>/dev/null; echo "*/1 * * * * cd $explorer_dir && /usr/bin/nodejs scripts/sync.js index update > /dev/null 2>&1") | crontab -
