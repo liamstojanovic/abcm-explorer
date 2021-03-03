@@ -2,6 +2,7 @@
 current_dir=$PWD
 current_user=$USER
 explorer_dir=""
+abcm_dir =""
 
 # Verify the installer has NOT been invoked as root user
 if [[ $EUID == 0 ]]; then
@@ -27,7 +28,7 @@ if [ $retVal -ne 0 ]; then
     exit 1
 fi
 
-read -p "Two directories will be generated in the abc-explorer (~/) directory: ~/abcmint, and ~/explorer. Press enter to continue..."
+read -p "Two directories will be generated in the abc-explorer directory: abcmint, and explorer. Press enter to continue..."
 cd $current_dir
 
 #Clone repositories
